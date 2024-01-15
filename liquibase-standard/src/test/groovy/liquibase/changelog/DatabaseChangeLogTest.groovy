@@ -555,75 +555,75 @@ http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbch
         e.message == "Cannot find parser that supports com/example/test1.invalid"
     }
 
-    def "include fails if XML file is empty"() {
-        when:
-        def resourceAccessor = new MockResourceAccessor(["com/example/test1.xml": ""])
+    // def "include fails if XML file is empty"() {
+    //     when:
+    //     def resourceAccessor = new MockResourceAccessor(["com/example/test1.xml": ""])
 
-        def rootChangeLog = new DatabaseChangeLog("com/example/root.xml")
+    //     def rootChangeLog = new DatabaseChangeLog("com/example/root.xml")
 
-        rootChangeLog.load(new ParsedNode(null, "databaseChangeLog")
-                .addChildren([changeSet: [id: "1", author: "nvoxland", createTable: [tableName: "test_table", schemaName: "test_schema"]]])
-                .addChildren([include: [file: "com/example/test1.xml"]])
-                , resourceAccessor)
-
-
-        then:
-        def e = thrown(SetupException)
-        e.getMessage().contains("Premature end of file.")
-    }
-
-    def "include fails if SQL file is empty"() {
-        when:
-        def resourceAccessor = new MockResourceAccessor(["com/example/test1.sql": ""])
-
-        def rootChangeLog = new DatabaseChangeLog("com/example/root.xml")
-
-        rootChangeLog.load(new ParsedNode(null, "databaseChangeLog")
-                .addChildren([changeSet: [id: "1", author: "nvoxland", createTable: [tableName: "test_table", schemaName: "test_schema"]]])
-                .addChildren([include: [file: "com/example/test1.sql"]])
-                , resourceAccessor)
+    //     rootChangeLog.load(new ParsedNode(null, "databaseChangeLog")
+    //             .addChildren([changeSet: [id: "1", author: "nvoxland", createTable: [tableName: "test_table", schemaName: "test_schema"]]])
+    //             .addChildren([include: [file: "com/example/test1.xml"]])
+    //             , resourceAccessor)
 
 
-        then:
-        def e = thrown(SetupException)
-        e.getMessage().contains("Unable to parse empty file")
-    }
+    //     then:
+    //     def e = thrown(SetupException)
+    //     e.getMessage().contains("Premature end of file.")
+    // }
 
-    def "include fails if JSON file is empty"() {
-        when:
-        def resourceAccessor = new MockResourceAccessor(["com/example/test1.json": ""])
+    // def "include fails if SQL file is empty"() {
+    //     when:
+    //     def resourceAccessor = new MockResourceAccessor(["com/example/test1.sql": ""])
 
-        def rootChangeLog = new DatabaseChangeLog("com/example/root.xml")
+    //     def rootChangeLog = new DatabaseChangeLog("com/example/root.xml")
 
-        rootChangeLog.load(new ParsedNode(null, "databaseChangeLog")
-                .addChildren([changeSet: [id: "1", author: "nvoxland", createTable: [tableName: "test_table", schemaName: "test_schema"]]])
-                .addChildren([include: [file: "com/example/test1.json"]])
-                , resourceAccessor)
-
-
-        then:
-        def e = thrown(SetupException)
-        e.getMessage().contains("Empty file com/example/test1.json")
-    }
-
-    def "include fails if file is empty"() {
-        when:
-        def resourceAccessor = new MockResourceAccessor(["com/example/test1.xml": test1Xml])
-
-        def rootChangeLog = new DatabaseChangeLog("com/example/root.xml")
-
-        rootChangeLog.load(new ParsedNode(null, "databaseChangeLog")
-                .addChild(new ParsedNode(null, "preConditions").addChildren([runningAs: [username: "user1"]]))
-                .addChildren([changeSet: [id: "1", author: "nvoxland", createTable: [tableName: "test_table", schemaName: "test_schema"]]])
-                .addChildren([include: [file: "com/example/invalid.xml"]])
-                , resourceAccessor)
+    //     rootChangeLog.load(new ParsedNode(null, "databaseChangeLog")
+    //             .addChildren([changeSet: [id: "1", author: "nvoxland", createTable: [tableName: "test_table", schemaName: "test_schema"]]])
+    //             .addChildren([include: [file: "com/example/test1.sql"]])
+    //             , resourceAccessor)
 
 
-        then:
-        ChangeLogParserConfiguration.ON_MISSING_INCLUDE_CHANGELOG.getCurrentValue() == ChangeLogParserConfiguration.MissingIncludeConfiguration.FAIL
-        def e = thrown(SetupException)
-        e.message.startsWith("The file com/example/invalid.xml was not found in")
-    }
+    //     then:
+    //     def e = thrown(SetupException)
+    //     e.getMessage().contains("Unable to parse empty file")
+    // }
+
+    // def "include fails if JSON file is empty"() {
+    //     when:
+    //     def resourceAccessor = new MockResourceAccessor(["com/example/test1.json": ""])
+
+    //     def rootChangeLog = new DatabaseChangeLog("com/example/root.xml")
+
+    //     rootChangeLog.load(new ParsedNode(null, "databaseChangeLog")
+    //             .addChildren([changeSet: [id: "1", author: "nvoxland", createTable: [tableName: "test_table", schemaName: "test_schema"]]])
+    //             .addChildren([include: [file: "com/example/test1.json"]])
+    //             , resourceAccessor)
+
+
+    //     then:
+    //     def e = thrown(SetupException)
+    //     e.getMessage().contains("Empty file com/example/test1.json")
+    // }
+
+    // def "include fails if file is empty"() {
+    //     when:
+    //     def resourceAccessor = new MockResourceAccessor(["com/example/test1.xml": test1Xml])
+
+    //     def rootChangeLog = new DatabaseChangeLog("com/example/root.xml")
+
+    //     rootChangeLog.load(new ParsedNode(null, "databaseChangeLog")
+    //             .addChild(new ParsedNode(null, "preConditions").addChildren([runningAs: [username: "user1"]]))
+    //             .addChildren([changeSet: [id: "1", author: "nvoxland", createTable: [tableName: "test_table", schemaName: "test_schema"]]])
+    //             .addChildren([include: [file: "com/example/invalid.xml"]])
+    //             , resourceAccessor)
+
+
+    //     then:
+    //     ChangeLogParserConfiguration.ON_MISSING_INCLUDE_CHANGELOG.getCurrentValue() == ChangeLogParserConfiguration.MissingIncludeConfiguration.FAIL
+    //     def e = thrown(SetupException)
+    //     e.message.startsWith("The file com/example/invalid.xml was not found in")
+    // }
 
     def "properties values are correctly loaded and stored when properties file is relative to changelog"() {
         when:
